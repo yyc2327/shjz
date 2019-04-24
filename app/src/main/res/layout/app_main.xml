@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+   <!-- CoordinatorLayout+AppBarLayout toolbar根据滑动隐藏-->
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/main_cl"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.activity.MainActivity">
+
+    <!--AppBarLayout是一个垂直LinearLayout实现了材料设计app bar概念的许多功能，即滚动手势。-->
+    <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/AppTheme.AppBarOverlay">
+        <!--引入toolbar布局-->
+        <include layout="@layout/app_toolbar"/>
+        <!--引入top_data布局-->
+        <include layout="@layout/app_top_date"/>
+
+        <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tablayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?attr/colorPrimary"
+                app:tabIndicatorColor="@color/background"/>
+
+    </com.google.android.material.appbar.AppBarLayout>
+    <!--Viewpager，视图翻页工具，提供了多页面切换的效果。-->
+    <androidx.viewpager.widget.ViewPager
+            android:id="@+id/main_viewpager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+       <!-- 使用帧布局可以让添加的明细排列整齐的显示出来-->
+        <FrameLayout
+                android:id="@+id/main_fg_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+        </FrameLayout>
+
+    </androidx.viewpager.widget.ViewPager>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
