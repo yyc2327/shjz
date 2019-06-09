@@ -1,5 +1,4 @@
 # CocoBill
-[English Version](https://github.com/zas023/CocoBill/blob/master/README_en.md) | 中文版
 
 :closed_book:一个数据存储使用的Bmob,采用MVP架构的Android记账本APP
 

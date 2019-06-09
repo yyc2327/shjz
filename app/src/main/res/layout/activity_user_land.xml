@@ -114,24 +114,24 @@
                 android:id="@+id/login_tv_forget"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
                 android:layout_marginLeft="20dp"
                 android:gravity="center"
-                android:layout_centerVertical="true"
-                android:text="Forgot password?"
-                android:textSize="14sp"
-                android:textColor="#999999"/>
+                android:text="忘记密码？"
+                android:textColor="#999999"
+                android:textSize="14sp" />
 
             <Button
                 android:id="@+id/login_btn_login"
+                style="@style/Button.Default"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="20dp"
-                android:padding="8dp"
-                android:gravity="center"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:text="Login"
-                style="@style/Button.Default"/>
+                android:layout_marginRight="20dp"
+                android:gravity="center"
+                android:padding="8dp"
+                android:text="登录" />
 
             <TextView
                 android:id="@+id/login_tv_sign"
@@ -141,20 +141,13 @@
                 android:layout_marginRight="8dp"
                 android:layout_toLeftOf="@id/login_btn_login"
                 android:gravity="center"
-                android:text="Sign Up"
+                android:text="注册"
                 android:textColor="#999999"
                 android:textSize="14sp" />
 
         </RelativeLayout>
 
     </LinearLayout>
-    <!--layout_above将控件置于给定ID控件之上layout_centerHorizontal将控件置于水平方向的中心位置-->
-    <com.copasso.cocobill.widget.OwlView
-        android:id="@+id/land_owl_view"
-        android:layout_above="@id/ll_login_pane"
-        android:layout_width="175dp"
-        android:layout_height="107dp"
-        android:layout_centerHorizontal="true"/>
 
 </RelativeLayout>
 

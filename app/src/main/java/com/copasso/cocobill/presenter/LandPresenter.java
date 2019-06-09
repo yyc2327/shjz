@@ -1,8 +1,6 @@
 package com.copasso.cocobill.presenter;
 
 
-import android.util.Log;
-
 import com.copasso.cocobill.base.RxPresenter;
 import com.copasso.cocobill.model.bean.remote.MyUser;
 import com.copasso.cocobill.presenter.contract.LandContract;

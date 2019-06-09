@@ -3,7 +3,6 @@ package com.copasso.cocobill.utils;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-
 import com.copasso.cocobill.R;
 import com.copasso.cocobill.common.Constants;
 

@@ -54,11 +54,11 @@ public class MonthChartFragment extends BaseMVPFragment<MonthChartContract.Prese
     private TextView title;
     private TextView money;
     private TextView rankTitle;
-    private RelativeLayout layoutOther;
+    /*private RelativeLayout layoutOther;*/
     private TextView otherMoney;
     private SwipeRefreshLayout swipe;
     private RelativeLayout itemType;
-    private RelativeLayout itemOther;
+    /*private RelativeLayout itemOther;*/
     private RecyclerView rvList;
     private LinearLayout layoutTypedata;
 
@@ -103,11 +103,8 @@ public class MonthChartFragment extends BaseMVPFragment<MonthChartContract.Prese
         title = getViewById(R.id.title);
         money = getViewById(R.id.money);
         rankTitle = getViewById(R.id.rank_title);
-        layoutOther = getViewById(R.id.layout_other);
-        otherMoney = getViewById(R.id.other_money);
         swipe = getViewById(R.id.swipe);
         itemType = getViewById(R.id.item_type);
-        itemOther = getViewById(R.id.item_other);
         rvList = getViewById(R.id.rv_list);
         layoutTypedata = getViewById(R.id.layout_typedata);
 
@@ -140,7 +137,6 @@ public class MonthChartFragment extends BaseMVPFragment<MonthChartContract.Prese
         super.initClick();
         layoutCenter.setOnClickListener(this);
         itemType.setOnClickListener(this);
-        itemOther.setOnClickListener(this);
     }
 
     @Override
@@ -157,8 +153,6 @@ public class MonthChartFragment extends BaseMVPFragment<MonthChartContract.Prese
                 setReportData();
                 break;
             case R.id.item_type:
-                break;
-            case R.id.item_other:
                 break;
         }
     }
@@ -245,7 +239,6 @@ public class MonthChartFragment extends BaseMVPFragment<MonthChartContract.Prese
         circleBg.setImageDrawable(new ColorDrawable(Color.parseColor(back_color)));
         circleImg.setImageDrawable(PieChartUtils.getDrawable(tMoneyBeanList.get(index).getSortImg()));
 
-//        adapter.setSortName(sort_name);
         adapter.setItems(tMoneyBeanList.get(index).getList());
         adapter.notifyDataSetChanged();
     }

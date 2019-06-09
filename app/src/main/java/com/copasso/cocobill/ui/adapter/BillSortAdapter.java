@@ -7,9 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.copasso.cocobill.R;
-import com.copasso.cocobill.common.Constants;
 import com.copasso.cocobill.model.bean.local.BSort;
 import com.copasso.cocobill.utils.ImageUtils;
 

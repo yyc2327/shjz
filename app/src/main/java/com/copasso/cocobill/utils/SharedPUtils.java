@@ -60,7 +60,7 @@ public class SharedPUtils {
     }
 
     /**
-     * 获取当前用户主题
+     * 设置当前用户主题
      */
     public static void setCurrentTheme(Context context, String theme) {
         SharedPreferences sp = context.getSharedPreferences(USER_SETTING, Context.MODE_PRIVATE);

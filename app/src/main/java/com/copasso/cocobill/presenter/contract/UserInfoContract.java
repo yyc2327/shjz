@@ -15,4 +15,6 @@ public interface UserInfoContract extends BaseContract {
          */
         void updateUser(MyUser user);
     }
+
+
 }

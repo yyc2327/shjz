@@ -2,9 +2,7 @@ package com.copasso.cocobill.base;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.pm.ActivityInfo;
 import android.os.Bundle;
-import android.view.Window;
 
 import com.copasso.cocobill.R;
 import com.copasso.cocobill.utils.ThemeManager;

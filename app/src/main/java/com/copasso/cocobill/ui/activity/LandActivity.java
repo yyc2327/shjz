@@ -1,12 +1,14 @@
 package com.copasso.cocobill.ui.activity;
 
 import android.content.Intent;
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.copasso.cocobill.R;
 import com.copasso.cocobill.base.BaseMVPActivity;
 import com.copasso.cocobill.model.bean.remote.MyUser;
@@ -15,14 +17,18 @@ import com.copasso.cocobill.presenter.contract.LandContract;
 import com.copasso.cocobill.utils.ProgressUtils;
 import com.copasso.cocobill.utils.SnackbarUtils;
 import com.copasso.cocobill.utils.StringUtils;
-import com.copasso.cocobill.widget.OwlView;
+import com.copasso.cocobill.utils.ToastUtils;
+
+import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.UpdateListener;
+
 /**
  * 用户登录、注册activity
  */
 public class LandActivity extends BaseMVPActivity<LandContract.Presenter>
-        implements LandContract.View, View.OnFocusChangeListener, View.OnClickListener {
+        implements LandContract.View,  View.OnClickListener {
 
-    private OwlView mOwlView;
     private EditText emailET;
     private EditText usernameET;
     private EditText passwordET;
@@ -42,7 +48,6 @@ public class LandActivity extends BaseMVPActivity<LandContract.Presenter>
     @Override
     protected void initWidget() {
         super.initWidget();
-        mOwlView=findViewById(R.id.land_owl_view);
         emailET=findViewById(R.id.login_et_email);
         usernameET=findViewById(R.id.login_et_username);
         passwordET=findViewById(R.id.login_et_password);
@@ -55,21 +60,11 @@ public class LandActivity extends BaseMVPActivity<LandContract.Presenter>
     @Override
     protected void initClick() {
         super.initClick();
-        passwordET.setOnFocusChangeListener(this);
-        rpasswordET.setOnFocusChangeListener(this);
         signTV.setOnClickListener(this);
         forgetTV.setOnClickListener(this);
         loginBtn.setOnClickListener(this);
     }
 
-    @Override
-    public void onFocusChange(View v, boolean hasFocus) {
-        if (hasFocus) {
-            mOwlView.open();
-        } else {
-            mOwlView.close();
-        }
-    }
 
     @Override
     public void onClick(View v) {
@@ -84,25 +79,63 @@ public class LandActivity extends BaseMVPActivity<LandContract.Presenter>
             case R.id.login_tv_sign:  //sign
                 if (isLogin) {
                     //置换注册界面
-                    signTV.setText("Login");
-                    loginBtn.setText("Sign Up");
+                    signTV.setText("登录");
+                    loginBtn.setText("注册");
                     rpasswordET.setVisibility(View.VISIBLE);
+                    forgetTV.setVisibility(View.GONE);
                     emailET.setVisibility(View.VISIBLE);
                 } else {
                     //置换登陆界面
-                    signTV.setText("Sign Up");
-                    loginBtn.setText("Login");
+                    signTV.setText("注册");
+                    loginBtn.setText("登录");
                     rpasswordET.setVisibility(View.GONE);
+                    forgetTV.setVisibility(View.VISIBLE);
                     emailET.setVisibility(View.GONE);
                 }
                 isLogin = !isLogin;
                 break;
             case R.id.login_tv_forget:  //忘记密码
+                showForgetPwDialog();
                 break;
             default:
                 break;
         }
     }
+
+    /**
+     * 显示忘记密码对话框
+     */
+    public void showForgetPwDialog() {
+        new MaterialDialog.Builder(this)
+                .title("备注")
+                .inputType(InputType.TYPE_CLASS_TEXT)
+                .input("请输入注册邮箱", null, (dialog, input) -> {
+                    if (!StringUtils.checkEmail(input.toString())) {
+                        SnackbarUtils.show(mContext, "请输入正确的邮箱格式");
+                        return;
+                    }
+                    if (input.equals("")) {
+                        SnackbarUtils.show(mContext, "内容不能为空！");
+
+                    } else {
+                        //找回密码
+                        BmobUser.resetPasswordByEmail(input.toString(), new UpdateListener() {
+                            @Override
+                            public void done(BmobException e) {
+                                if (e == null) {
+                                    ToastUtils.show(mContext, "重置密码请求成功，请到邮箱进行密码重置操作");
+                                } else {
+                                    ToastUtils.show(mContext, "失败:" + e.getMessage());
+                                }
+                            }
+                        });
+                    }
+                })
+                .positiveText("确定")
+                .negativeText("取消")
+                .show();
+    }
+
 
     /**
      * 执行登陆动作

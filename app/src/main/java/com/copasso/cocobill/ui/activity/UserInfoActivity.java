@@ -1,7 +1,6 @@
 package com.copasso.cocobill.ui.activity;
 
 import android.Manifest;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -13,7 +12,6 @@ import android.provider.MediaStore;
 import android.text.InputType;
 import android.util.Log;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -122,16 +120,17 @@ public class UserInfoActivity extends BaseMVPActivity<UserInfoContract.Presenter
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.rlt_update_icon:  //头像
-//                showIconDialog();
+            case R.id.rlt_update_icon:  //头像修改
+                showIconDialog();
                 startActivityForResult(
                         new Intent(Intent.ACTION_GET_CONTENT).setType("image/*"),
                         CHOOSE_PICTURE);
                 break;
-            case R.id.cil_username:  //用户名
-                SnackbarUtils.show(mContext, "江湖人行不更名，坐不改姓！");
+            case R.id.cil_username:  //用户名修改
+                showUserNameDialog();
+                //SnackbarUtils.show(mContext, "江湖人行不更名，坐不改姓！");
                 break;
-            case R.id.cil_sex:  //性别
+            case R.id.cil_sex:  //性别选择
                 showGenderDialog();
                 break;
             case R.id.cil_phone:  //电话修改
@@ -149,25 +148,69 @@ public class UserInfoActivity extends BaseMVPActivity<UserInfoContract.Presenter
      * 显示选择头像来源对话框
      */
     public void showIconDialog() {
+        final String[] array = {"相册", "相机"};
         new MaterialDialog.Builder(mContext)
                 .title("选择图片来源")
                 .titleGravity(GravityEnum.CENTER)
-                .items(new String[]{"相册", "相机"})
-                .positiveText("确定")
-                .itemsCallbackSingleChoice(0, (dialog, itemView, which, text) -> {
+                .items(array)
+                .itemsCallback(new MaterialDialog.ListCallback() {
+                    @Override
+                    public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+
+                        switch (which) {
+                            case CHOOSE_PICTURE: // 0选择本地照片
+                                Intent openAlbumIntent = new Intent(Intent.ACTION_GET_CONTENT);
+                                openAlbumIntent.setType("image/*");
+                                startActivityForResult(openAlbumIntent, CHOOSE_PICTURE);
+                                break;
+                            case TAKE_PICTURE: // 1拍照
+                                takePicture();
+                                break;
+                        }
+                        dialog.dismiss();//销毁dialog对象
+                    }
+
+                })
+                /*.itemsCallbackSingleChoice(0, (dialog, itemView, which, text) -> {
                     switch (which) {
-                        case CHOOSE_PICTURE: // 选择本地照片
+                        case CHOOSE_PICTURE: // 0选择本地照片
                             Intent openAlbumIntent = new Intent(Intent.ACTION_GET_CONTENT);
                             openAlbumIntent.setType("image/*");
                             startActivityForResult(openAlbumIntent, CHOOSE_PICTURE);
                             break;
-                        case TAKE_PICTURE: // 拍照
+                        case TAKE_PICTURE: // 1拍照
                             takePicture();
                             break;
                     }
-                    dialog.dismiss();
+                    dialog.dismiss();//销毁dialog对象
                     return false;
-                }).show();
+                })*/
+                .positiveText("确定")
+                .negativeText("取消")
+                .show();
+    }
+    /**
+     *显示用户名修改对话框
+     */
+    public void showUserNameDialog(){
+        String userName = currentUser.getUsername();
+        new MaterialDialog.Builder(mContext)
+                .title("用户名")
+                .inputType(InputType.TYPE_CLASS_TEXT)
+                .inputRangeRes(0, 200, R.color.textRed)
+                .input("请输入用户名", userName, (dialog, input) -> {
+                    String inputStr=input.toString();
+                    if (inputStr.equals("")) {
+                        ToastUtils.show(mContext,"内容不能为空！" + input);
+                    } else {
+                        currentUser.setUsername(inputStr);
+                        usernameCL.setRightText(inputStr);
+                        doUpdate();
+                    }
+                })
+                .positiveText("确定")
+                .negativeText("取消")
+                .show();
     }
 
     /**
@@ -188,20 +231,6 @@ public class UserInfoActivity extends BaseMVPActivity<UserInfoContract.Presenter
                     dialog.dismiss();
                     return false;
                 }).show();
-//        switch (which) {
-//            case GENDER_MAN: // 男性
-//                if(currentUser.getGender().equals("女")){
-//                    currentUser.setGender("男");
-//                    doUpdate();
-//                }
-//                break;
-//            case GENDER_FEMALE: // 女性
-//                if(currentUser.getGender().equals("男")){
-//                    currentUser.setGender("女");
-//                    doUpdate();
-//                }
-//                break;
-//        }
     }
 
     /**
@@ -229,6 +258,7 @@ public class UserInfoActivity extends BaseMVPActivity<UserInfoContract.Presenter
                     }
                 })
                 .positiveText("确定")
+                .negativeText("取消")
                 .show();
     }
 
@@ -236,7 +266,7 @@ public class UserInfoActivity extends BaseMVPActivity<UserInfoContract.Presenter
      * 显示更换邮箱对话框
      */
     public void showMailDialog() {
-        String email = currentUser.getMobilePhoneNumber();
+        String email = currentUser.getEmail();
         new MaterialDialog.Builder(mContext)
                 .title("邮箱")
                 .inputType(InputType.TYPE_CLASS_TEXT)
@@ -257,6 +287,7 @@ public class UserInfoActivity extends BaseMVPActivity<UserInfoContract.Presenter
                     }
                 })
                 .positiveText("确定")
+                .negativeText("取消")
                 .show();
     }
 

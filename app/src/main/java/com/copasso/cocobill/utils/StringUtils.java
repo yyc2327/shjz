@@ -24,6 +24,18 @@ public class StringUtils {
         }
         return flag;
     }
+    /**
+     *判断是否为空,支持格式Object和String
+     * @param str
+     */
+    public static boolean isNull(String str){
+        if (null == str) {
+            return true;
+        } else if (str instanceof String) {
+            return "".equals(str) || "null".equals(str);
+        }
+        return false;
+    }
 
     /**
      * 验证手机号码，11位数字，1开通，第二位数必须是3456789这些数字之一 *
